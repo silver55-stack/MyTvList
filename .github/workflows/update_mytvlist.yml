@@ -15,10 +15,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download and Uncompress File
+      - name: Download, Uncompress, and Trim File
         run: |
-          curl -sL "https://github.com/ferteque/Curated-M3U-Repository/raw/refs/heads/main/epg6.xml.gz" -o mytvlist.xml.gz
-          gunzip -f mytvlist.xml.gz
+          # 1. Download target archive
+          curl -sL "https://github.com/ferteque/Curated-M3U-Repository/raw/refs/heads/main/epg6.xml.gz" -o temp.xml.gz
+          gunzip -f temp.xml.gz
+          
+          # 2. Extract active channels/programs while stripping excess bloated whitespace
+          # This drastically reduces file size well below GitHub's 100MB limit
+          grep -v '^[[:space:]]*$' temp.xml > mytvlist.xml
+          rm temp.xml
 
       - name: Commit and Push Updated XML to Repository
         run: |
