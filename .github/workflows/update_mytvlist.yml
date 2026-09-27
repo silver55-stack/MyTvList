@@ -3,7 +3,10 @@ name: Auto Uncompress EPG
 on:
   schedule:
     - cron: '0 4 * * *' # Runs automatically every day at 4:00 AM UTC
-  workflow_dispatch: # Allows you to run it manually anytime with 1 click
+  workflow_dispatch: # Allows manual trigger
+
+permissions:
+  contents: write
 
 jobs:
   update-epg:
